@@ -1,0 +1,56 @@
+---
+
+dependencies:
+
+    - role: debops.apt
+      tags:
+        - 'depend::apt'
+        - 'depend::apt:bareos-dir'
+        - 'depend-of::bareos-dir'
+        - 'type::dependency'
+      apt__host_keys:
+        - '{{ bareos_dir__apt__repositories_key }}'
+      apt__host_repositories:
+        - '{{ bareos_dir__apt__repositories }}'
+      when: bareos_dir__dependencies_apt and
+              ansible_os_family == 'Debian'
+
+    - role: debops.ferm
+      tags:
+        - 'depend::ferm'
+        - 'depend::ferm:bareos-dir'
+        - 'depend-of::bareos-dir'
+        - 'type::dependency'
+      ferm_dependent_rules:
+        - '{{ bareos_dir__ferm__dependent_rules }}'
+      when: bareos_dir__dependencies_ferm and
+              ansible_os_family == 'Debian'
+
+    - role: debops.postgresql_server
+      tags:
+        - 'depend::postgresql_server'
+        - 'depend::postgresql_server:bareos-dir'
+        - 'depend-of::bareos-dir'
+        - 'type::dependency'
+      when: bareos_dir__dependencies_postgresql_server and
+              ansible_os_family == 'Debian'
+
+    - role: debops.secret
+
+galaxy_info:
+  author: 'Aleksej Gavrilov'
+  description: 'This role installs bareos-dir and webui'
+  license: 'MIT'
+  min_ansible_version: '2.2.1'
+  platforms:
+  - name: Debian
+    versions:
+    - jessie
+  - name: Ubuntu
+    versions:
+    - trusty
+  categories:
+    - system
+    - backup
+
+## vim: foldmethod=marker:tabstop=2:shiftwidth=2:softtabstop=2

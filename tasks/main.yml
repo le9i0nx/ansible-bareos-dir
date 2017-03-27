@@ -1,0 +1,37 @@
+---
+
+- name: Install bareos-dir packages
+  package:
+    name: '{{ item }}'
+    state: 'latest'
+    install_recommends: False
+  notify:
+    - bareos apache2 restarted
+    - bareos bareos-director restarted
+  with_items:
+      - 'bareos-database-postgresql'
+      - 'bareos-director'
+      - 'bareos-bconsole'
+      - 'bareos-webui'
+
+- name: template conf bareos director
+  template:
+    src: "etc/bareos/bareos-dir.d/{{ item.path }}.j2"
+    dest: '/etc/bareos/bareos-dir.d/{{ item.path }}'
+    owner: "root"
+    group: "bareos"
+    mode: '0540'
+  notify:
+    - bareos bareos-director restarted
+  with_items:
+    - { path: "console/admin.conf" }
+
+- name: bareos director enable
+  systemd:
+    name: bareos-director
+    enabled: yes
+  notify:
+    - bareos bareos-director restarted
+
+
+## vim: foldmethod=marker:tabstop=2:shiftwidth=2:softtabstop=2

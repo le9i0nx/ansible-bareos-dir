@@ -1,0 +1,34 @@
+---
+
+bareos_dir__dependencies_apt: True
+bareos_dir__dependencies_ferm: True
+bareos_dir__dependencies_postgresql_server: True
+
+bareos_dir__webui_user: "admin"
+password_length: '20'
+bareos_dir__webui_passwd: "{{ lookup('password', secret + '/bareos/' + ansible_fqdn + '/webui/password length=' + password_length) }}"
+bareos_dir__dist_map:
+  'Debian8': "Debian_8.0"
+  'Ubuntu16': "xUbuntu_16.04"
+  'Ubuntu14': "xUbuntu_14.04"
+
+# gpg --keyserver ha.pool.sks-keyservers.net --recv-key F93C028C093BFBA2
+# gpg -a --export F93C028C093BFBA2 | apt-key add -
+# apt-key adv --list-public-keys --with-fingerprint --with-colons
+bareos_dir__apt__repositories_key:
+  - id: '0143857D9CE8C2D182FE2631F93C028C093BFBA2'
+    keyserver: 'hkp://ha.pool.sks-keyservers.net:80'
+
+bareos_dir__apt__repositories:
+  - repo: 'deb http://download.bareos.org/bareos/release/latest/{{ bareos_dir__dist_map[ansible_distribution+ansible_distribution_major_version] }}/ /'
+
+bareos_dir__ferm__dependent_rules:
+
+  - type: 'accept'
+    dport: [ 'bacula-dir', 'http' ]
+    protocol: [ 'tcp' ]
+    role: 'le9i0nx.bareos-dir'
+    name: 'bareos-dir'
+    accept_any: True
+
+## vim: foldmethod=marker:tabstop=2:shiftwidth=2:softtabstop=2

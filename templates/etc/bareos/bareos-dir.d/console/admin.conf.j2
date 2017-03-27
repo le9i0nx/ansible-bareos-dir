@@ -1,0 +1,9 @@
+#{{ ansible_managed }}
+#
+# Restricted console used by bareos-webui
+#
+Console {
+  Name = {{ bareos_dir__webui_user }}
+  Password = "{{ bareos_dir__webui_passwd }}"
+  Profile = "webui-admin"
+}

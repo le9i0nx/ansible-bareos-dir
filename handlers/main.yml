@@ -1,0 +1,13 @@
+---
+
+- name: bareos apache2 restarted
+  service:
+    name:  apache2
+    state: restarted
+
+- name: bareos bareos-director restarted
+  service:
+    name:  bareos-director
+    state: restarted
+
+## vim: foldmethod=marker:tabstop=2:shiftwidth=2:softtabstop=2

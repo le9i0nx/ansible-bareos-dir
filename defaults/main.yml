@@ -21,6 +21,7 @@ bareos_dir__apt__repositories_key:
 
 bareos_dir__apt__repositories:
   - repo: 'deb http://download.bareos.org/bareos/release/latest/{{ bareos_dir__dist_map[ansible_distribution+ansible_distribution_major_version] }}/ /'
+    mode: '0444'
 
 bareos_dir__ferm__dependent_rules:
 
